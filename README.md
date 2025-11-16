@@ -1,8 +1,7 @@
-# Tiêu đề Project
-Decision Tree Classifier Implementation with NumPy
+# Explore HR Analytics Dataset with Numpy
 
 ## Mô tả ngắn gọn
-Dự án này triển khai một Decision Tree Classifier hoàn toàn bằng NumPy, nhằm phân loại dữ liệu, trực quan hóa cây quyết định và đánh giá kết quả thông qua các biểu đồ.
+Dự án này triển khai một quy trình exploration data, preprocessing, xây dựng mô hình và dự đoán label hoàn toàn bằng NumPy.
 
 ---
 
@@ -25,16 +24,31 @@ Dự án này triển khai một Decision Tree Classifier hoàn toàn bằng Num
 
 ## Giới thiệu
 ### Mô tả bài toán
-Triển khai một Decision Tree Classifier từ đầu sử dụng NumPy, không phụ thuộc vào thư viện học máy bên ngoài.
+Trong bối cảnh nhu cầu tuyển dụng Data Scientist ngày càng tăng, các công ty thường gặp khó khăn trong việc duy trì đội ngũ nhân sự chất lượng. Nhiều ứng viên Data Science đăng ký các khóa đào tạo, tham gia thi tuyển, nhưng khó dự đoán liệu họ có thực sự muốn chuyển việc hay không. Điều này dẫn đến:
+- Lãng phí chi phí tuyển dụng
+- Lãng phí thời gian phỏng vấn
+- Khó tối ưu nguồn lực đào tạo và hỗ trợ
+- Giảm hiệu quả trong chiến lược nhân sự
+Bài toán đặt mục tiêu xây dựng một mô hình dự đoán xem ứng viên có đang tìm kiếm cơ hội việc làm mới hay không dựa trên hồ sơ cá nhân, kỹ năng, kinh nghiệm và tương tác của họ với chương trình đào tạo.
 
 ### Động lực và ứng dụng thực tế
-Decision Tree là thuật toán cơ bản trong học máy, được sử dụng rộng rãi trong phân loại dữ liệu y tế, marketing, phân loại sản phẩm, dự đoán rủi ro, v.v.
 
-### Mục tiêu cụ thể
-- Hiểu cách xây dựng Decision Tree từ đầu.  
-- Triển khai các thuật toán phân tách và tính entropy/giảm thông tin.  
-- Trực quan hóa cây và kết quả phân loại.  
-- Đánh giá độ chính xác và loss.
+
+### 📊 Mục tiêu cụ thể
+
+#### 1. Phân tích nhân khẩu học
+- **Xác định các biến nhân khẩu học** ảnh hưởng đến quyết định thay đổi công việc
+- **Phân tích mối tương quan** giữa đặc điểm cá nhân và ý định nghỉ việc
+- **Đánh giá tác động** của các yếu tố như trình độ học vấn, kinh nghiệm, giới tính, v.v.
+
+#### 2. Dự đoán nhị phân
+- **Xây dựng mô hình dự đoán** kết quả nhị phân:
+  - `0` - Không tìm kiếm việc làm
+  - `1` - Đang tìm kiếm việc làm (có ý định thay đổi)
+- **Đánh giá hiệu suất** mô hình với các metrics phù hợp
+
+#### 3. Áp dụng quy trình Khoa học Dữ liệu
+**Triển khai quy trình KDD (Knowledge Discovery in Databases):**
 
 ---
 
@@ -42,23 +56,37 @@ Decision Tree là thuật toán cơ bản trong học máy, được sử dụng
 ### Nguồn dữ liệu
 Sử dụng dataset mẫu [tên dataset, ví dụ: Iris] từ nguồn mở UCI hoặc tự tạo.
 
-### Mô tả các features
-- `feature_1`: Mô tả  
-- `feature_2`: Mô tả  
-- …  
+### Mô tả thuộc tính dataset
+
+- **enrollee_id**: ID duy nhất của ứng viên
+- **city**: Mã thành phố  
+- **city_development_index**: Chỉ số phát triển của thành phố (đã được điều chỉnh tỷ lệ)
+- **gender**: Giới tính của ứng viên
+- **relevent_experience**: Kinh nghiệm liên quan của ứng viên
+- **enrolled_university**: Loại khóa học đại học (nếu có đăng ký)
+- **education_level**: Trình độ học vấn của ứng viên
+- **major_discipline**: Chuyên ngành học chính
+- **experience**: Tổng số năm kinh nghiệm của ứng viên
+- **company_size**: Số lượng nhân viên trong công ty hiện tại
+- **company_type**: Loại hình công ty hiện tại
+- **lastnewjob**: Khoảng thời gian (năm) giữa công việc trước và công việc hiện tại
+- **training_hours**: Số giờ đào tạo đã hoàn thành
+- **target**: Kết quả (nhãn)
+  - `0` - Không tìm kiếm việc làm
+  - `1` - Đang tìm kiếm việc làm
 
 ### Kích thước và đặc điểm dữ liệu
-- Số samples: 150  
-- Số features: 4  
-- Classes: 3  
+- Số samples: 19158
+- Số features: 14
+- Classes: 2
 
 ---
 
 ## Method
 ### Quy trình xử lý dữ liệu
-1. Chuẩn hóa dữ liệu nếu cần.  
-2. Chia train/test.  
-3. Huấn luyện Decision Tree bằng thuật toán ID3/Entropy.
+1. Cleaning Data 
+2. Missing value processing
+3. Encode Category Data
 
 ### Thuật toán sử dụng
 - **Entropy**:  
@@ -88,15 +116,22 @@ cd <repo_folder>
 # Cài đặt các thư viện cần thiết
 pip install -r requirements.txt
 ```
+---
+
 ## Usage
-Chỉ cần chạy 3 file notebook theo thứ tự là được
+Chạy lần lượt 3 file trong thư mục notebooks
+1. 01_data_exploration.ipynb
+2. 02_data_preprocessing.ipynb
+3. 03_data_modeling.ipynb
+
+---
 
 ## Project Structure
 HR-ANALYTICS/
 │
 ├── data/
 │   ├── raw/                # Dữ liệu gốc chưa xử lý
-│   └── processed/          # Dữ liệu sau xử lý, clean, feature engineering
+│   └── processed/          # Dữ liệu sau xử lý, clean
 │
 ├── notebooks/
 │   ├── 01_data_exploration.ipynb     # Phân tích dữ liệu (EDA)
@@ -119,15 +154,15 @@ Khó khăn: Implement thuật toán ID3 bằng NumPy, xử lý dữ liệu categ
 
 Giải pháp: Sử dụng np.unique, np.bincount, boolean indexing để tính entropy và gain hiệu quả.
 
+---
+
 ## Future Improvements
+- Hỗ trợ pruning để giảm overfitting.
+- Thêm Random Forest và Gradient Boosting.
+- Tối ưu tốc độ cho dataset lớn.
+- Thêm trực quan hóa cây bằng matplotlib trực tiếp.
 
-Hỗ trợ pruning để giảm overfitting.
-
-Thêm Random Forest và Gradient Boosting.
-
-Tối ưu tốc độ cho dataset lớn.
-
-Thêm trực quan hóa cây bằng matplotlib trực tiếp.
+---
 
 ## Contributors
 

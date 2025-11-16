@@ -127,6 +127,7 @@ Chạy lần lượt 3 file trong thư mục notebooks
 ---
 
 ## Project Structure
+```
 HR-ANALYTICS/
 │
 ├── data/
@@ -147,7 +148,7 @@ HR-ANALYTICS/
 │
 ├── requirements.txt          # Danh sách thư viện cần cài đặt
 └── README.md                 # Tài liệu mô tả project
-
+```
 ## Challenges & Solutions
 
 Khó khăn: Implement thuật toán ID3 bằng NumPy, xử lý dữ liệu category và numeric.

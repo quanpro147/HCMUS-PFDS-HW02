@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 def try_convert_to_numeric(column):
     try:
@@ -11,27 +12,8 @@ def try_convert_to_numeric(column):
         return column, False
 
 def visualize_features(X, y, feature_names=None):
-    feature_names_map = {
-        "f0": "enrollee_id",
-        "f1": "city",
-        "f2": "city_development_index",
-        "f3": "gender",
-        "f4": "relevent_experience",
-        "f5": "enrolled_university",
-        "f6": "education_level",
-        "f7": "major_discipline",
-        "f8": "experience",
-        "f9": "company_size",
-        "f10": "company_type",
-        "f11": "last_new_job",
-        "f12": "training_hours",
-        "f13": "target"
-    }
 
     n_features = X.shape[1]
-    if feature_names is None:
-        feature_names = [feature_names_map.get(f"f{i}", f"f{i}") for i in range(n_features)]
-
     for i in range(n_features):
         feature_data = X[:, i]
         converted_feature, is_numeric = try_convert_to_numeric(feature_data)
@@ -149,3 +131,110 @@ def line_plot(col_data, col_name, title=None, color='blue', marker='o'):
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.tight_layout()
     plt.show()
+
+def confusion_matrix_plot(y_true, y_pred, labels=None, normalize=False, cmap="Blues", title="Confusion Matrix"):
+
+    y_true = np.array(y_true)
+    y_pred = np.array(y_pred)
+    
+    if labels is None:
+        labels = np.unique(np.concatenate([y_true, y_pred]))
+    
+    n_labels = len(labels)
+    label_to_index = {label: i for i, label in enumerate(labels)}
+    
+    # Tạo ma trận confusion
+    cm = np.zeros((n_labels, n_labels), dtype=int)
+    for t, p in zip(y_true, y_pred):
+        i = label_to_index[t]
+        j = label_to_index[p]
+        cm[i, j] += 1
+    
+    if normalize:
+        cm = cm.astype(float)
+        cm = cm / cm.sum(axis=1, keepdims=True)
+    
+    # Vẽ heatmap
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt=".2f" if normalize else "d", cmap=cmap,
+                xticklabels=labels, yticklabels=labels)
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title(title)
+    plt.show()
+
+
+def visualize_model_results_comparison(model1_name, model1_results, model2_name, model2_results):
+    """
+    So sánh và visualize hiệu suất của hai mô hình bằng biểu đồ cột nhóm.
+    """
+    metrics = ['Accuracy', 'Precision', 'Recall', 'F1 Score']
+    scores1 = np.array(model1_results)
+    scores2 = np.array(model2_results)
+
+    sns.set_style("whitegrid")
+
+    plt.figure(figsize=(10, 6))
+    x = np.arange(len(metrics))
+    width = 0.35
+    rects1 = plt.bar(x - width/2, scores1, width, label=model1_name, color='skyblue')
+    rects2 = plt.bar(x + width/2, scores2, width, label=model2_name, color='lightcoral')
+    def autolabel(rects):
+        for rect in rects:
+            height = rect.get_height()
+            plt.annotate(f'{height:.3f}',
+                         xy=(rect.get_x() + rect.get_width() / 2, height),
+                         xytext=(0, 3), 
+                         textcoords="offset points",
+                         ha='center', va='bottom', fontsize=9)
+
+    autolabel(rects1)
+    autolabel(rects2)
+    plt.title(f'So sánh Hiệu suất của {model1_name} và {model2_name}', fontsize=16)
+    plt.ylabel('Giá trị Chỉ số (Score)', fontsize=14)
+    plt.xticks(x, metrics)
+    plt.ylim(np.min([scores1, scores2]) * 0.9, np.max([scores1, scores2]) * 1.1)
+    
+    plt.legend(title='Mô hình')
+    plt.tight_layout()
+    plt.show()
+
+
+def non_missing_count_plot(data_array, column_names=None, title="Non-missing Values per Column"):
+    """
+    Vẽ biểu đồ cột thể hiện số giá trị không phải missing cho mỗi cột.
+    - Với cột số: loại bỏ np.nan
+    - Với cột object/string: loại bỏ chuỗi rỗng hoặc chỉ có khoảng trắng
+    """
+    # Nếu là structured array
+    if hasattr(data_array, "dtype") and data_array.dtype.names is not None:
+        cols = data_array.dtype.names
+        X = np.column_stack([data_array[col] for col in cols])
+        if column_names is None:
+            column_names = cols
+    else:
+        X = data_array
+        if column_names is None:
+            column_names = [f"Col {i}" for i in range(X.shape[1])]
+    
+    non_missing_counts = []
+
+    for i in range(X.shape[1]):
+        col = X[:, i]
+        # Kiểm tra dtype
+        if np.issubdtype(col.dtype, np.number):
+            count = np.sum(~np.isnan(col.astype(float)))
+        else:
+            # object/string: loại bỏ chuỗi rỗng hoặc chỉ khoảng trắng
+            count = np.sum([bool(str(x).strip()) for x in col])
+        non_missing_counts.append(count)
+
+    # Vẽ bar chart
+    plt.figure(figsize=(10, 5))
+    plt.bar(column_names, non_missing_counts, color='skyblue')
+    plt.xticks(rotation=45, ha='right')
+    plt.ylabel("Non-missing Count")
+    plt.title(title)
+    plt.tight_layout()
+    plt.show()
+

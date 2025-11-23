@@ -1,7 +1,7 @@
 # Explore HR Analytics Dataset with Numpy
 
 ## Mô tả ngắn gọn
-Dự án này triển khai một quy trình exploration data, preprocessing, xây dựng mô hình và dự đoán label hoàn toàn bằng NumPy.
+Dự án này triển khai một quy trình exploratory data analysis (EDA), preprocessing, xây dựng mô hình Decision Tree và K-Nearest Neighbors (KNN), và dự đoán nhãn hoàn toàn bằng NumPy, không phụ thuộc vào thư viện học máy bên ngoài.
 
 ---
 
@@ -32,7 +32,9 @@ Trong bối cảnh nhu cầu tuyển dụng Data Scientist ngày càng tăng, c�
 Bài toán đặt mục tiêu xây dựng một mô hình dự đoán xem ứng viên có đang tìm kiếm cơ hội việc làm mới hay không dựa trên hồ sơ cá nhân, kỹ năng, kinh nghiệm và tương tác của họ với chương trình đào tạo.
 
 ### Động lực và ứng dụng thực tế
-
+- Hỗ trợ HR và các công ty tối ưu hóa chiến lược tuyển dụng.
+- Dự đoán sớm ứng viên có nguy cơ nghỉ việc giúp giữ chân nhân sự quan trọng.
+- Phân tích các yếu tố ảnh hưởng đến quyết định thay đổi công việc.
 
 ### 📊 Mục tiêu cụ thể
 
@@ -49,7 +51,7 @@ Bài toán đặt mục tiêu xây dựng một mô hình dự đoán xem ứng 
 
 #### 3. Áp dụng quy trình Khoa học Dữ liệu
 **Triển khai quy trình KDD (Knowledge Discovery in Databases):**
-
+Thực hiện đầy đủ các bước: Cleaning → Preprocessing → Feature Encoding → Modeling → Evaluation
 ---
 
 ## Dataset
@@ -89,6 +91,10 @@ Sử dụng dataset mẫu [tên dataset, ví dụ: Iris] từ nguồn mở UCI h
 3. Encode Category Data
 
 ### Thuật toán sử dụng
+1. K-Nearest Neighbour
+- Tính khoảng cách Euclidean giữa sample test và training set.
+- Chọn K láng giềng gần nhất, vote nhãn nhiều nhất.
+2. Decision Tree
 - **Entropy**:  
 \[
 H(Y) = -\sum_{i=1}^{n} p_i \log_2 p_i
@@ -112,13 +118,16 @@ IG(S, A) = H(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} H(S_v)
 # Clone repository
 git clone <repo_url>
 cd <repo_folder>
+# Cài đặt môi trường (optional) - conda
+conda create --name hw02 python=3.10
+conda activate hw02
 
 # Cài đặt các thư viện cần thiết
 pip install -r requirements.txt
 ```
 ---
 
-## Usage
+## Run
 Chạy lần lượt 3 file trong thư mục notebooks
 1. 01_data_exploration.ipynb
 2. 02_data_preprocessing.ipynb
@@ -167,7 +176,7 @@ Giải pháp: Sử dụng np.unique, np.bincount, boolean indexing để tính e
 
 ## Contributors
 
-Quân Phan Ngọc
+Phan Ngọc Quân
 Contact:
 - Email: quanphanpq147@gmail.com
 

@@ -1,26 +1,76 @@
 import numpy as np
 
+# class KNN để xử lý missing value
+class KNNImputer:
+    def __init__(self, n_neighbors=5, weights='uniform'):
+        self.n_neighbors = n_neighbors
+        self.weights = weights
+        self.X_fit = None
 
+    def fit(self, X: np.ndarray):
+        self.X_fit = X.astype(float)
+        return self
+
+    def transform(self, X: np.ndarray) -> np.ndarray:
+        if self.X_fit is None:
+            raise ValueError("KNNImputer chưa fit dữ liệu")
+        
+        X = X.astype(float)
+        X_imputed = X.copy()
+        n_rows, n_cols = X.shape
+        
+        for i in range(n_rows):
+            row = X[i, :]
+            mask_missing = np.isnan(row)
+            if not np.any(mask_missing):
+                continue
+
+            # Cột không missing
+            mask_valid = ~mask_missing
+            diff = self.X_fit[:, mask_valid] - row[mask_valid]
+            dists = np.sqrt(np.sum(diff**2, axis=1))
+            
+            # Chọn k hàng gần nhất
+            neighbor_idx = np.argsort(dists)[:self.n_neighbors]
+            
+            for j in np.where(mask_missing)[0]:
+                neighbor_vals = self.X_fit[neighbor_idx, j]
+                neighbor_vals = neighbor_vals[~np.isnan(neighbor_vals)]
+                if len(neighbor_vals) == 0:
+                    continue
+                if self.weights == 'uniform':
+                    X_imputed[i, j] = np.mean(neighbor_vals)
+                elif self.weights == 'distance':
+                    weights = 1 / (dists[neighbor_idx][:len(neighbor_vals)] + 1e-8)
+                    X_imputed[i, j] = np.average(neighbor_vals, weights=weights)
+        return X_imputed
+
+    def fit_transform(self, X: np.ndarray) -> np.ndarray:
+        return self.fit(X).transform(X)
+
+# Class Encoder các cột categories thành numeric
 class LabelEncoder:
     def __init__(self):
         self.classes_ = None
         self.class_to_index = None
 
     def fit(self, array_1d: np.ndarray):
-        # Chuyển về string (an toàn cho mixed types)
-        array_1d = array_1d.astype(str)
-        # Tìm các giá trị duy nhất, sắp xếp
-        self.classes_ = np.unique(array_1d)
-        # Tạo mapping value -> index
+        # Lọc bỏ missing value khi fit
+        mask = array_1d != array_1d
+        unique_vals = np.unique(array_1d[~mask])
+        self.classes_ = unique_vals
         self.class_to_index = {val: i for i, val in enumerate(self.classes_)}
         return self
 
     def transform(self, array_1d: np.ndarray) -> np.ndarray:
-        array_1d = array_1d.astype(str)
         if self.class_to_index is None:
             raise ValueError("LabelEncoder chưa được fit trước")
-        # Map từng giá trị sang index
-        return np.array([self.class_to_index[val] for val in array_1d], dtype=int)
+        
+        result = np.full(array_1d.shape, np.nan)
+        for val, idx in self.class_to_index.items():
+            mask = array_1d == val
+            result[mask] = idx
+        return result.astype(float)
 
     def fit_transform(self, array_1d: np.ndarray) -> np.ndarray:
         self.fit(array_1d)
@@ -29,9 +79,13 @@ class LabelEncoder:
     def inverse_transform(self, index_array: np.ndarray) -> np.ndarray:
         if self.classes_ is None:
             raise ValueError("LabelEncoder chưa được fit trước")
-        return np.array([self.classes_[i] for i in index_array])
+        result = np.full(index_array.shape, np.nan, dtype=object)
+        for val, idx in zip(self.classes_, range(len(self.classes_))):
+            mask = index_array == idx
+            result[mask] = val
+        return result
 
-
+# Class để cân bằng dữ liệu
 class SMOTE:
     """
     Simple SMOTE implementation using NumPy.
@@ -108,7 +162,7 @@ class SMOTE:
 
         return X_resampled, y_resampled
 
-
+# Class KNN để phân loại
 class KNNClassifier:
     def __init__(self, n_neighbors=5):
         self.n_neighbors = n_neighbors
@@ -131,7 +185,6 @@ class KNNClassifier:
         return np.array(y_pred)
 
 
-
 class DecisionTreeNode:
     def __init__(self, feature=None, threshold=None, left=None, right=None, *, value=None):
         self.feature = feature
@@ -139,7 +192,8 @@ class DecisionTreeNode:
         self.left = left
         self.right = right
         self.value = value
-
+        
+# Class Decision Tree để phân loại
 class DecisionTreeClassifier:
     def __init__(self, max_depth=None, min_samples_split=2):
         self.max_depth = max_depth
@@ -202,7 +256,7 @@ class DecisionTreeClassifier:
         # 2) Tìm split tốt nhất
         feature, threshold = self._best_split(X, y)
 
-        # 3) Nếu không có split tốt → leaf
+        # 3) Nếu không có split tốt -> leaf
         if feature is None:
             value = np.bincount(y).argmax()
             return DecisionTreeNode(value=value)
@@ -211,7 +265,7 @@ class DecisionTreeClassifier:
         left_mask = X[:, feature] <= threshold
         right_mask = X[:, feature] > threshold
 
-        # 5) Nếu child rỗng → leaf
+        # 5) Nếu child rỗng -> leaf
         if left_mask.sum() == 0 or right_mask.sum() == 0:
             value = np.bincount(y).argmax()
             return DecisionTreeNode(value=value)

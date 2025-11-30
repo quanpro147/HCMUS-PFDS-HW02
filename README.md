@@ -91,26 +91,34 @@ Thực hiện đầy đủ các bước: Cleaning → Preprocessing → Feature 
 3. Encode Category Data
 
 ### Thuật toán sử dụng
-1. K-Nearest Neighbour
-- Tính khoảng cách Euclidean giữa sample test và training set.
-- Chọn K láng giềng gần nhất, vote nhãn nhiều nhất.
-2. Decision Tree
-- **Entropy**:  
-$$
-H(Y) = -\sum_{i=1}^{n} p_i \log_2 p_i
-$$
 
-**Information Gain**:
+#### 1. K-Nearest Neighbors (KNN)
+1. Chuẩn hóa dữ liệu nếu cần.  
+2. Tính khoảng cách giữa mẫu test và toàn bộ training set (ví dụ: Euclidean).  
+3. Sắp xếp các khoảng cách và chọn `K` láng giềng gần nhất.  
+4. Thực hiện "majority vote" để quyết định nhãn dự đoán.  
+5. Trả về nhãn và (tùy chọn) tỉ lệ phiếu làm độ tin cậy.
 
-$$
-IG(S, A) = H(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} H(S_v)
-$$
+#### 2. Decision Tree (Cây quyết định)
+**Metríc sử dụng**
+- **Entropy**  
+  $$
+  H(Y) = -\sum_{i=1}^{n} p_i \log_2 p_i
+  $$
+- **Information Gain (IG)**  
+  $$
+  IG(S, A) = H(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} H(S_v)
+  $$
 
-- **Split Node**: Chọn feature và threshold cho gain cao nhất.
-
-### Giải thích cách implement bằng NumPy
-- Tính entropy, split, chọn feature tốt nhất sử dụng các hàm `np.unique`, `np.bincount`, boolean indexing.  
-- Duy trì cây bằng class `DecisionTreeNode` và đệ quy `_build_tree`.  
+**Quy trình xây dựng cây**
+1. Tại mỗi node, duyệt từng feature và các ngưỡng (threshold) có thể.  
+2. Với mỗi split: chia dữ liệu thành các nhánh và tính entropy cho từng phần.  
+3. Tính Information Gain → chọn split có IG lớn nhất.  
+4. Dừng khi:
+   - tất cả mẫu cùng nhãn, hoặc  
+   - số mẫu quá nhỏ, hoặc  
+   - đạt max depth.  
+5. Node lá gán nhãn bằng nhãn xuất hiện nhiều nhất.
 
 ---
 

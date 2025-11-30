@@ -96,14 +96,15 @@ Sử dụng dataset mẫu [tên dataset, ví dụ: Iris] từ nguồn mở UCI h
 - Chọn K láng giềng gần nhất, vote nhãn nhiều nhất.
 2. Decision Tree
 - **Entropy**:  
-\[
+$$
 H(Y) = -\sum_{i=1}^{n} p_i \log_2 p_i
-\]
+$$
 
-- **Information Gain**:  
-\[
+**Information Gain**:
+
+$$
 IG(S, A) = H(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} H(S_v)
-\]
+$$
 
 - **Split Node**: Chọn feature và threshold cho gain cao nhất.
 
@@ -116,8 +117,8 @@ IG(S, A) = H(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} H(S_v)
 ## Installation & Setup
 ```bash
 # Clone repository
-git clone <repo_url>
-cd <repo_folder>
+git clone https://github.com/quanpro147/HCMUS-PFDS-HW02.git
+cd HCMUS-PFDS-HW02
 # Cài đặt môi trường (optional) - conda
 conda create --name hw02 python=3.10
 conda activate hw02

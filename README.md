@@ -56,7 +56,7 @@ Thực hiện đầy đủ các bước: Cleaning → Preprocessing → Feature 
 
 ## Dataset
 ### Nguồn dữ liệu
-Sử dụng dataset mẫu [tên dataset, ví dụ: Iris] từ nguồn mở UCI hoặc tự tạo.
+[hr-analytics-job-change-of-data-scientists](https://www.kaggle.com/datasets/arashnic/hr-analytics-job-change-of-data-scientists)
 
 ### Mô tả thuộc tính dataset
 

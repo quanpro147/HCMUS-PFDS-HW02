@@ -100,7 +100,7 @@ Thực hiện đầy đủ các bước: Cleaning → Preprocessing → Feature 
 5. Trả về nhãn và (tùy chọn) tỉ lệ phiếu làm độ tin cậy.
 
 #### 2. Decision Tree (Cây quyết định)
-**Metríc sử dụng**
+**Metric sử dụng**
 - **Entropy**  
 
   $$
@@ -110,7 +110,8 @@ Thực hiện đầy đủ các bước: Cleaning → Preprocessing → Feature 
 - **Information Gain (IG)**  
 
   $$
-  IG(S, A) = H(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} H(S_v)
+  IG(S, A) = H(S) - \sum_{v \in Values(A)} 
+  \frac{\lvert S_v \rvert}{\lvert S \rvert} H(S_v)
   $$
 
 **Quy trình xây dựng cây**

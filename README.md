@@ -102,10 +102,13 @@ Thực hiện đầy đủ các bước: Cleaning → Preprocessing → Feature 
 #### 2. Decision Tree (Cây quyết định)
 **Metríc sử dụng**
 - **Entropy**  
+
   $$
   H(Y) = -\sum_{i=1}^{n} p_i \log_2 p_i
   $$
+
 - **Information Gain (IG)**  
+
   $$
   IG(S, A) = H(S) - \sum_{v \in Values(A)} \frac{|S_v|}{|S|} H(S_v)
   $$
@@ -137,10 +140,11 @@ pip install -r requirements.txt
 ---
 
 ## Run
-Chạy lần lượt 3 file trong thư mục notebooks
-1. 01_data_exploration.ipynb
-2. 02_data_preprocessing.ipynb
-3. 03_data_modeling.ipynb
+Chạy lần lượt 3 notebook trong thư mục `notebooks/`:
+
+1. `01_data_exploration.ipynb`
+2. `02_data_preprocessing.ipynb`
+3. `03_data_modeling.ipynb`
 
 ---
 
@@ -169,9 +173,11 @@ HR-ANALYTICS/
 ```
 ## Challenges & Solutions
 
-Khó khăn: Implement thuật toán ID3 bằng NumPy, xử lý dữ liệu category và numeric.
+Khó khăn: Implement thuật toán ID3 hoàn toàn bằng NumPy, đặc biệt là xử lý
+categorical features, tính entropy/gain và tìm split tối ưu.
 
-Giải pháp: Sử dụng np.unique, np.bincount, boolean indexing để tính entropy và gain hiệu quả.
+Giải pháp: Tận dụng np.unique, np.bincount, và boolean indexing để giảm độ phức tạp,
+tăng tốc tính toán; chuẩn hóa pipeline encode → split → compute gain nhất quán.
 
 ---
 
@@ -184,15 +190,14 @@ Giải pháp: Sử dụng np.unique, np.bincount, boolean indexing để tính e
 ---
 
 ## Contributors
+- **Phan Ngọc Quân**
 
-Phan Ngọc Quân
-
-Contact:
+## Contact
 - Email: quanphanpq147@gmail.com
 
 ---
 
-### Liscense
+### License
 MIT License
 
 Copyright (c) 2025 Phan Ngọc Quân

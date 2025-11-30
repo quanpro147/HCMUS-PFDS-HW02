@@ -110,8 +110,7 @@ Thực hiện đầy đủ các bước: Cleaning → Preprocessing → Feature 
 - **Information Gain (IG)**  
 
   $$
-  IG(S, A) = H(S) - \sum_{v \in Values(A)} 
-  \frac{\lvert S_v \rvert}{\lvert S \rvert} H(S_v)
+  IG(S, A) = H(S) - \sum_{v \in Values(A)} \frac{\lvert S_v \rvert}{\lvert S \rvert} H(S_v)
   $$
 
 **Quy trình xây dựng cây**

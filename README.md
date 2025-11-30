@@ -100,28 +100,21 @@ Thực hiện đầy đủ các bước: Cleaning → Preprocessing → Feature 
 5. Trả về nhãn và (tùy chọn) tỉ lệ phiếu làm độ tin cậy.
 
 #### 2. Decision Tree (Cây quyết định)
-**Metric sử dụng**
-- **Entropy**  
-
-  $$
-  H(Y) = -\sum_{i=1}^{n} p_i \log_2 p_i
-  $$
-
-- **Information Gain (IG)**  
-
-  $$
-  IG(S, A) = H(S) - \sum_{v \in Values(A)} \frac{\lvert S_v \rvert}{\lvert S \rvert} H(S_v)
-  $$
 
 **Quy trình xây dựng cây**
-1. Tại mỗi node, duyệt từng feature và các ngưỡng (threshold) có thể.  
-2. Với mỗi split: chia dữ liệu thành các nhánh và tính entropy cho từng phần.  
-3. Tính Information Gain → chọn split có IG lớn nhất.  
+1. Với mỗi feature, lấy toàn bộ **giá trị duy nhất** làm ngưỡng thử (thresholds).  
+2. Với mỗi threshold:
+   - Chia dữ liệu thành hai nhánh:  
+     - nhánh trái: `feature <= threshold`  
+     - nhánh phải: `feature > threshold`  
+   - Tính entropy hai nhánh.  
+3. Tính Information Gain cho từng split và chọn split có IG lớn nhất.  
 4. Dừng khi:
    - tất cả mẫu cùng nhãn, hoặc  
-   - số mẫu quá nhỏ, hoặc  
-   - đạt max depth.  
-5. Node lá gán nhãn bằng nhãn xuất hiện nhiều nhất.
+   - số mẫu nhỏ hơn `min_samples_split`, hoặc  
+   - đạt `max_depth`, hoặc  
+   - không tìm được split hợp lệ.  
+5. Node lá được gán nhãn theo số lượng mẫu nhiều nhất.
 
 ---
 
